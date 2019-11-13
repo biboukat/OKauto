@@ -9,13 +9,13 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import {useLazyQuery} from '@apollo/react-hooks';
+
+import api from '~/api';
 
 export default function Heroes() {
   const [value, onChangeText] = useState('');
-
-  const handleFind = () => {
-    console.log('bla value', value);
-  };
+  const [getHero, {loading, data, error}] = useLazyQuery(api.GET_HERO_BY_ID);
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -28,12 +28,14 @@ export default function Heroes() {
             value={value}
             style={styles.input}
             autoCapitalize={'none'}
-            onSubmitEditing={handleFind}
+            onSubmitEditing={() => getHero({variables: {id: value}})}
             returnKeyType={'search'}
           />
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={handleFind}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => getHero({variables: {id: value}})}>
               <Text style={styles.buttonText}>{'Find'}</Text>
             </TouchableOpacity>
           </View>
