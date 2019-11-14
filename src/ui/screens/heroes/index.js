@@ -8,14 +8,28 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import {useLazyQuery} from '@apollo/react-hooks';
+import lodashGet from 'lodash/get';
 
 import api from '~/api';
 
-export default function Heroes() {
+export default function Heroes({navigation}) {
   const [value, onChangeText] = useState('');
-  const [getHero, {loading, data, error}] = useLazyQuery(api.GET_HERO_BY_ID);
+  const [getHero, {loading, data}] = useLazyQuery(api.GET_HERO_BY_ID, {
+    onCompleted: data => {
+      navigation.navigate('CharacterInfo', {data});
+    },
+    onError: e => {
+      alert(e);
+    },
+    returnPartialData: true,
+  });
+
+  if (lodashGet(data, 'character.id', null) === value) {
+    navigation.navigate('CharacterInfo', {data});
+  }
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -41,6 +55,12 @@ export default function Heroes() {
           </View>
         </View>
       </TouchableWithoutFeedback>
+
+      {loading ? (
+        <View style={styles.spiner}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -78,5 +98,15 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: '#fff',
     fontWeight: 'bold',
+  },
+  spiner: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
