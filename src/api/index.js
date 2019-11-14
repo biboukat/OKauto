@@ -5,6 +5,9 @@ const GET_HERO_BY_ID = gql`
     character(id: $id) {
       id
       name
+      gender
+      type
+      species
       location {
         name
       }
