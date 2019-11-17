@@ -8,11 +8,17 @@ export default class Item extends PureComponent {
     name: PropTypes.string.isRequired,
     air_date: PropTypes.string.isRequired,
   };
+
+  _onPress = () => {
+    const {id, onPress} = this.props;
+    onPress(id);
+  };
+
   render() {
     const {name, air_date} = this.props;
 
     return (
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity style={styles.container} onPress={this._onPress}>
         <Text style={styles.name}>{name}</Text>
 
         <Text>{air_date}</Text>

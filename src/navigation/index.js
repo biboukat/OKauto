@@ -5,6 +5,7 @@ import {createBottomTabNavigator} from 'react-navigation-tabs';
 import HeroesScreen from '~/ui/screens/heroes';
 import EpisodesScreen from '~/ui/screens/episodes';
 import CharacterInfoScreen from '~/ui/screens/characterInfo';
+import EpisodeInfoScreen from '~/ui/screens/episodeInfo';
 
 const CharacterStack = createStackNavigator({
   Heroes: {
@@ -18,6 +19,9 @@ const CharacterStack = createStackNavigator({
 const EpisodesStack = createStackNavigator({
   Episodes: {
     screen: EpisodesScreen,
+  },
+  EpisodeInfo: {
+    screen: EpisodeInfoScreen,
   },
   CharacterInfo: {
     screen: CharacterInfoScreen,

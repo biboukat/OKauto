@@ -16,6 +16,21 @@ const GET_HERO_BY_ID = gql`
   }
 `;
 
+const GET_EPISODE_BY_ID = gql`
+  query Episode($id: ID!) {
+    episode(id: $id) {
+      id
+      name
+      air_date
+      episode
+      characters {
+        name
+        id
+      }
+    }
+  }
+`;
+
 const GET_EPISODES = gql`
   query Episodes($page: Int!) {
     episodes(page: $page) {
@@ -33,4 +48,4 @@ const GET_EPISODES = gql`
   }
 `;
 
-export default {GET_HERO_BY_ID, GET_EPISODES};
+export default {GET_HERO_BY_ID, GET_EPISODES, GET_EPISODE_BY_ID};

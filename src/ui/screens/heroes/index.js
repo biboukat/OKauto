@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -18,8 +18,8 @@ import api from '~/api';
 export default function Heroes({navigation}) {
   const [value, onChangeText] = useState('');
   const [getHero, {loading, data}] = useLazyQuery(api.GET_HERO_BY_ID, {
-    onCompleted: data => {
-      navigation.navigate('CharacterInfo', {data});
+    onCompleted: onCompleteData => {
+      navigation.navigate('CharacterInfo', {data: onCompleteData});
     },
     onError: e => {
       alert(e);
@@ -27,9 +27,13 @@ export default function Heroes({navigation}) {
     returnPartialData: true,
   });
 
-  if (lodashGet(data, 'character.id', null) === value) {
-    navigation.navigate('CharacterInfo', {data});
-  }
+  const findHero = () => {
+    if (lodashGet(data, 'character.id', null) === value) {
+      navigation.navigate('CharacterInfo', {data});
+    } else {
+      getHero({variables: {id: value}});
+    }
+  };
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -42,14 +46,13 @@ export default function Heroes({navigation}) {
             value={value}
             style={styles.input}
             autoCapitalize={'none'}
-            onSubmitEditing={() => getHero({variables: {id: value}})}
+            onSubmitEditing={findHero}
             returnKeyType={'search'}
+            keyboardType={'numeric'}
           />
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => getHero({variables: {id: value}})}>
+            <TouchableOpacity style={styles.button} onPress={findHero}>
               <Text style={styles.buttonText}>{'Find'}</Text>
             </TouchableOpacity>
           </View>
