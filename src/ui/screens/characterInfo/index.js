@@ -6,7 +6,6 @@ export default function CharacterDetails({navigation}) {
   if (!data.character) {
     navigation.goBack();
   }
-  console.log('bla data.character', data.character);
 
   const {image, name, gender, type, species} = data.character;
 
